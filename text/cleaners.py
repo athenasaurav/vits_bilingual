@@ -113,7 +113,7 @@ def he_cleaners(text):
     english_texts = re.findall(r'\[EN\].*?\[EN\]', text)
     for hindi_text in hindi_texts:
         cleaned_text = hindi_cleaners2(hindi_text[4:-4])
-        text = text.replace(chinese_text, cleaned_text+' ', 1)
+        text = text.replace(hindi_text, cleaned_text+' ', 1)
     for english_text in english_texts:
         cleaned_text = english_cleaners2(english_text[4:-4])
         text = text.replace(english_text, cleaned_text+' ', 1)
