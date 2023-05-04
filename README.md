@@ -32,6 +32,7 @@ We also provide the [pretrained models](https://drive.google.com/drive/folders/1
 0. Download datasets
     1. Download and extract the LJ Speech dataset, then rename or create a link to the dataset folder: `ln -s /path/to/LJSpeech-1.1/wavs DUMMY1`
     1. For mult-speaker setting, download and extract the VCTK dataset, and downsample wav files to 22050 Hz. Then rename or create a link to the dataset folder: `ln -s /path/to/VCTK-Corpus/downsampled_wavs DUMMY2`
+    1. Download and extract the LJ Multi Speech dataset, then rename or create a link to the dataset folder: `ln -s /path/to/LJSpeech-1.1/wavs DUMMY3`
 0. Build Monotonic Alignment Search and run preprocessing if you use your own datasets.
 ```sh
 # Cython-version Monotonoic Alignment Search
