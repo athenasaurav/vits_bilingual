@@ -52,7 +52,7 @@ python setup.py build_ext --inplace
 python train.py -c configs/ljs_base.json -m ljs_base
 
 # LJ Speech - multi
-python train.py -c configs/ljs_mulit.json -m ljs_multi
+python train.py -c configs/ljs_multi.json -m ljs_multi
 
 # VCTK
 python train_ms.py -c configs/vctk_base.json -m vctk_base
