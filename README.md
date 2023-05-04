@@ -40,6 +40,7 @@ python setup.py build_ext --inplace
 
 # Preprocessing (g2p) for your own datasets. Preprocessed phonemes for LJ Speech and VCTK have been already provided.
 # python preprocess.py --text_index 1 --filelists filelists/ljs_audio_text_train_filelist.txt filelists/ljs_audio_text_val_filelist.txt filelists/ljs_audio_text_test_filelist.txt 
+# python preprocess.py --text_index 1 --filelists filelists/ljs_multi_text_train_filelist.txt filelists/ljs_multi_text_val_filelist.txt filelists/ljs_multi_text_test_filelist.txt --text_cleaners he_cleaners
 # python preprocess.py --text_index 2 --filelists filelists/vctk_audio_sid_text_train_filelist.txt filelists/vctk_audio_sid_text_val_filelist.txt filelists/vctk_audio_sid_text_test_filelist.txt
 ```
 
@@ -48,6 +49,9 @@ python setup.py build_ext --inplace
 ```sh
 # LJ Speech
 python train.py -c configs/ljs_base.json -m ljs_base
+
+# LJ Speech - multi
+python train.py -c configs/ljs_mulit.json -m ljs_multi
 
 # VCTK
 python train_ms.py -c configs/vctk_base.json -m vctk_base
