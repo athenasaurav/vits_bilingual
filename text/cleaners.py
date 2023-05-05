@@ -17,6 +17,7 @@ from unidecode import unidecode
 # from phonemizer import phonemize
 import phonemizer
 global_phonemizer = phonemizer.backend.EspeakBackend(language='en-us', preserve_punctuation=True,  with_stress=True)
+from indic_transliteration import sanscript
 
 # Regular expression matching whitespace:
 _whitespace_re = re.compile(r'\s+')
@@ -44,6 +45,66 @@ _abbreviations = [(re.compile('\\b%s\\.' % x[0], re.IGNORECASE), x[1]) for x in 
 ]]
 
 
+# List of (iast, ipa) pairs:
+_iast_to_ipa = [(re.compile('%s' % x[0]), x[1]) for x in [
+    ('a', 'ə'),
+    ('ā', 'aː'),
+    ('ī', 'iː'),
+    ('ū', 'uː'),
+    ('ṛ', 'ɹ`'),
+    ('ṝ', 'ɹ`ː'),
+    ('ḷ', 'l`'),
+    ('ḹ', 'l`ː'),
+    ('e', 'eː'),
+    ('o', 'oː'),
+    ('k', 'k⁼'),
+    ('k⁼h', 'kʰ'),
+    ('g', 'g⁼'),
+    ('g⁼h', 'gʰ'),
+    ('ṅ', 'ŋ'),
+    ('c', 'ʧ⁼'),
+    ('ʧ⁼h', 'ʧʰ'),
+    ('j', 'ʥ⁼'),
+    ('ʥ⁼h', 'ʥʰ'),
+    ('ñ', 'n^'),
+    ('ṭ', 't`⁼'),
+    ('t`⁼h', 't`ʰ'),
+    ('ḍ', 'd`⁼'),
+    ('d`⁼h', 'd`ʰ'),
+    ('ṇ', 'n`'),
+    ('t', 't⁼'),
+    ('t⁼h', 'tʰ'),
+    ('d', 'd⁼'),
+    ('d⁼h', 'dʰ'),
+    ('p', 'p⁼'),
+    ('p⁼h', 'pʰ'),
+    ('b', 'b⁼'),
+    ('b⁼h', 'bʰ'),
+    ('y', 'j'),
+    ('ś', 'ʃ'),
+    ('ṣ', 's`'),
+    ('r', 'ɾ'),
+    ('l̤', 'l`'),
+    ('h', 'ɦ'),
+    ("'", ''),
+    ('~', '^'),
+    ('ṃ', '^')
+]]
+
+
+def devanagari_to_ipa(text):
+    text = text.replace('ॐ', 'ओम्')
+    text = re.sub(r'\s*।\s*$', '.', text)
+    text = re.sub(r'\s*।\s*', ', ', text)
+    text = re.sub(r'\s*॥', '.', text)
+    text = sanscript.transliterate(text, sanscript.DEVANAGARI, sanscript.IAST)
+    for regex, replacement in _iast_to_ipa:
+        text = re.sub(regex, replacement, text)
+    text = re.sub('(.)[`ː]*ḥ', lambda x: x.group(0)
+                  [:-1]+'h'+x.group(1)+'*', text)
+    return text
+    
+    
 def expand_abbreviations(text):
   for regex, replacement in _abbreviations:
     text = re.sub(regex, replacement, text)
@@ -115,7 +176,7 @@ def he_cleaners(text):
     hindi_texts = re.findall(r'\[HI\].*?\[HI\]', text)
     english_texts = re.findall(r'\[EN\].*?\[EN\]', text)
     for hindi_text in hindi_texts:
-        cleaned_text = hindi_cleaners2(hindi_text[4:-4])
+        cleaned_text = devanagari_to_ipa(hindi_text[4:-4])
         text = text.replace(hindi_text, cleaned_text+' ', 1)
     for english_text in english_texts:
         cleaned_text = english_cleaners2(english_text[4:-4])
